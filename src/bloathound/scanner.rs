@@ -53,6 +53,12 @@ impl Scanner {
             .insert(normalized);
     }
 
+    // limits the amount of files to store in top files
+    // default is 100
+    pub fn set_limit(&mut self, limit: usize) {
+        self.limit = limit;
+    }
+
     pub fn scan(&mut self) {
         let pb = ProgressBar::new_spinner();
         pb.set_style(

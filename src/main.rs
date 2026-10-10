@@ -107,7 +107,7 @@ fn interactive_flow() {
         .collect();
 
     let selected_extensions = MultiSelect::new()
-        .with_prompt("Select which file extensions to IGNORE during the scan.")
+        .with_prompt("Select which file extensions to IGNORE during the scan")
         .items(&extension_labels)
         .max_length(10)
         .interact()
@@ -117,6 +117,21 @@ fn interactive_flow() {
         let ext_to_ignore = available_extensions[idx];
         scanner.ignore_extension(ext_to_ignore.to_extension());
     }
+
+    let available_limits = vec![50, 100, 150, 200, 250, 300];
+    let available_limits_labels: Vec<String> = available_limits
+        .iter()
+        .map(|limit| format!("{}", limit))
+        .collect();
+
+    let selected_limit = Select::new()
+        .with_prompt("Chose a limit for the amount of largest files")
+        .items(&available_limits_labels)
+        .interact()
+        .unwrap();
+
+    let chosen_limit = available_limits[selected_limit];
+    scanner.set_limit(chosen_limit);
 
     scanner.scan();
 
@@ -216,4 +231,6 @@ fn elide_middle(text: &str, max: usize) -> String {
     out
 }
 
-fn scanner_workflow(path: PathBuf, limit: usize) {}
+fn scanner_workflow(path: PathBuf, limit: usize) {
+    println!("Not implemented yet")
+}
