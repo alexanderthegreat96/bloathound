@@ -1,0 +1,16 @@
+# Cross-compiling to Linux from a machine without a C toolchain.
+#
+# Without this, cargo reaches for `cc` and picks up whatever the host has (on
+# Windows with msys2 that is the mingw linker), which then fails on ELF-only
+# flags like `--eh-frame-hdr`. `rust-lld` ships with the Rust toolchain and
+# links ELF directly, and the musl targets bundle a self-contained libc, so no
+# system sysroot is needed.
+#
+# These musl builds are statically linked, so the resulting binary also runs on
+# glibc distributions.
+
+[target.x86_64-unknown-linux-musl]
+linker = "rust-lld"
+
+[target.aarch64-unknown-linux-musl]
+linker = "rust-lld"

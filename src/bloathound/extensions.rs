@@ -1,4 +1,4 @@
-#![allow(unused)]
+#[allow(dead_code)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Extensions {
     Txt,
@@ -116,7 +116,7 @@ pub enum Extensions {
 }
 
 impl Extensions {
-    pub fn to_extension(&self) -> &str {
+    pub fn to_extension(self) -> &'static str {
         match self {
             Extensions::Txt => "txt",
             Extensions::Doc => "doc",
@@ -233,6 +233,9 @@ impl Extensions {
         }
     }
 
+    // compiled the most used extensions here
+    // dunno if I should include them all
+    // there's a ton of them in reality
     pub fn all() -> &'static [Extensions] {
         &[
             Extensions::Txt,
@@ -260,24 +263,30 @@ impl Extensions {
     }
 }
 
-pub trait IntoExtensionString {
-    fn into_ext_string(self) -> String;
-}
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::collections::HashSet;
 
-impl IntoExtensionString for &str {
-    fn into_ext_string(self) -> String {
-        self.to_string()
+    #[test]
+    fn all_exposes_distinct_extensions() {
+        let extensions = Extensions::all();
+        let unique: HashSet<&str> = extensions.iter().map(|ext| ext.to_extension()).collect();
+
+        assert_eq!(
+            unique.len(),
+            extensions.len(),
+            "Extensions::all() contains duplicate extension strings"
+        );
     }
-}
 
-impl IntoExtensionString for String {
-    fn into_ext_string(self) -> String {
-        self
-    }
-}
-
-impl IntoExtensionString for Extensions {
-    fn into_ext_string(self) -> String {
-        self.to_extension().to_string()
+    #[test]
+    fn to_extension_never_includes_a_leading_dot() {
+        for ext in Extensions::all() {
+            let text = ext.to_extension();
+            assert!(!text.is_empty(), "{ext:?} has an empty extension");
+            assert!(!text.starts_with('.'), "{ext:?} starts with a dot: {text}");
+            assert_eq!(text, text.to_lowercase(), "{ext:?} is not lowercase");
+        }
     }
 }
