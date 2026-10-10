@@ -16,7 +16,7 @@ struct Cli {
     permanent: bool,
 
     #[command(subcommand)]
-    command: Option<Commands>,
+    command: Commands,
 }
 
 #[derive(Subcommand, Debug)]
@@ -38,7 +38,7 @@ pub fn run() -> ExitCode {
     let cli = Cli::parse();
     let permanent = cli.permanent;
 
-    match cli.command.unwrap_or(Commands::Interactive) {
+    match cli.command {
         Commands::Interactive => {
             interactive::run(permanent);
             ExitCode::SUCCESS
