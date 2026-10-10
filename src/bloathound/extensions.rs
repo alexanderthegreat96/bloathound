@@ -232,6 +232,32 @@ impl Extensions {
             Extensions::Tmp => "tmp",
         }
     }
+
+    pub fn all() -> &'static [Extensions] {
+        &[
+            Extensions::Txt,
+            Extensions::Doc,
+            Extensions::Docx,
+            Extensions::Pdf,
+            Extensions::Json,
+            Extensions::Xml,
+            Extensions::Yaml,
+            Extensions::Log,
+            Extensions::Mp4,
+            Extensions::Mkv,
+            Extensions::Mp3,
+            Extensions::Jpg,
+            Extensions::Png,
+            Extensions::Zip,
+            Extensions::Rar,
+            Extensions::SevenZ,
+            Extensions::Rs,
+            Extensions::Py,
+            Extensions::Js,
+            Extensions::Exe,
+            Extensions::Dll,
+        ]
+    }
 }
 
 pub trait IntoExtensionString {

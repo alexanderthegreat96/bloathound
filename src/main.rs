@@ -99,6 +99,25 @@ fn interactive_flow() {
     println!("Selected target: {:?}", target_path);
 
     let mut scanner = Scanner::new(target_path);
+
+    let available_extensions = Extensions::all();
+    let extension_labels: Vec<String> = available_extensions
+        .iter()
+        .map(|ext| format!(".{}", ext.to_extension()))
+        .collect();
+
+    let selected_extensions = MultiSelect::new()
+        .with_prompt("Select which file extensions to IGNORE during the scan.")
+        .items(&extension_labels)
+        .max_length(10)
+        .interact()
+        .unwrap();
+
+    for idx in selected_extensions {
+        let ext_to_ignore = available_extensions[idx];
+        scanner.ignore_extension(ext_to_ignore.to_extension());
+    }
+
     scanner.scan();
 
     io::stdout().flush().unwrap();
